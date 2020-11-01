@@ -8,8 +8,9 @@
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-![](basic.gif)![](fade.gif)![](byOne.gif)
+<img src="/basic.gif" width="375" height="667"/>
+<img src="/fade.gif" width="375" height="667"/>
+<img src="/byOne.gif" width="375" height="667"/>
 
 ## Requirements
 
