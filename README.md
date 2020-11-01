@@ -201,6 +201,7 @@ Animations, Animations, Animations. I will try to add more animations for everyt
 ## Author
 
 Narek1994, nareksimonyan94@gmail.com
+
 https://www.linkedin.com/in/narek-simonyan-b3974b120/
 
 ## License
