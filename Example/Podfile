@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'NSVAnimatedTabBar_Example' do
+  pod 'NSVAnimatedTabBar', :path => '../'
+
+  target 'NSVAnimatedTabBar_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
