@@ -1,0 +1,6 @@
+framework module NSVAnimatedTabBar {
+  umbrella header "NSVAnimatedTabBar-umbrella.h"
+
+  export *
+  module * { export * }
+}

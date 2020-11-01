@@ -1,24 +1,51 @@
 //
 //  ViewController.swift
-//  NSVAnimatedTabBar
+//  TabTestApp
 //
-//  Created by Narek1994 on 11/01/2020.
-//  Copyright (c) 2020 Narek1994. All rights reserved.
+//  Created by Narek Simonyan on 10/29/20.
 //
 
 import UIKit
+import NSVAnimatedTabBar
 
 class ViewController: UIViewController {
 
+    @IBOutlet var containerStackView: UIStackView!
+    let controller = NSVAnimatedTabController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        controller.delegate = self
+        controller.configure(tabControllers: [getController(index: 1, color: .red),getController(index: 2, color: .green),getController(index: 3, color: .blue),getController(index: 4, color: .cyan)],
+                             with: DefaultAnimatedTabOptions())
+        containerStackView.addArrangedSubview(controller.view)
+        addChild(controller)
+        controller.didMove(toParent: self)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func getController(index: Int, color: UIColor) -> UIViewController {
+        let controller = storyboard!.instantiateViewController(withIdentifier: "ViewController") as! SimpleViewController
+        controller.text = index.description
+        controller.backgroundColor = color
+        return controller
     }
-
 }
 
+extension ViewController: NSVAnimatedTabControllerDelegate {
+
+    func shouldSelect(at index: Int, item: CenterItemSubOptionItem) -> Bool {
+        return true
+    }
+
+    func didSelect(at index: Int, item: CenterItemSubOptionItem) {
+        print(index)
+    }
+
+    func shouldSelect(at index: Int, item: AnimatedTabItem, tabController: UIViewController) -> Bool {
+        return true
+    }
+
+    func didSelect(at index: Int, item: AnimatedTabItem, tabController: UIViewController) {
+        print(index)
+    }
+}

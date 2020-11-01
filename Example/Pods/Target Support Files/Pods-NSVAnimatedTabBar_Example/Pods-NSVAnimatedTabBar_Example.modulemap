@@ -1,0 +1,6 @@
+framework module Pods_NSVAnimatedTabBar_Example {
+  umbrella header "Pods-NSVAnimatedTabBar_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

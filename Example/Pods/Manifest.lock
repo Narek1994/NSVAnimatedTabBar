@@ -1,0 +1,16 @@
+PODS:
+  - NSVAnimatedTabBar (0.1.0)
+
+DEPENDENCIES:
+  - NSVAnimatedTabBar (from `../`)
+
+EXTERNAL SOURCES:
+  NSVAnimatedTabBar:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  NSVAnimatedTabBar: 4e5b9bdce4d0b1152759352ddee56f83fb2b84d4
+
+PODFILE CHECKSUM: 691c34f94012c17295d0cd5c267afd44bfc01f16
+
+COCOAPODS: 1.9.3
