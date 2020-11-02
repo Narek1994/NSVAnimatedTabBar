@@ -8,8 +8,9 @@
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-![](basic.gif)![](fade.gif)![](byOne.gif)
+<img src="/basic.gif" width="375" height="667"/>
+<img src="/fade.gif" width="375" height="667"/>
+<img src="/byOne.gif" width="375" height="667"/>
 
 ## Requirements
 
@@ -200,6 +201,7 @@ Animations, Animations, Animations. I will try to add more animations for everyt
 ## Author
 
 Narek1994, nareksimonyan94@gmail.com
+
 https://www.linkedin.com/in/narek-simonyan-b3974b120/
 
 ## License
