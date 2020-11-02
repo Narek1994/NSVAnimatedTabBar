@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NSVAnimatedTabBar'
-  s.version          = '0.1.0'
+  s.version          = '0.1.3'
   s.summary          = 'Fully customizable animated tab bar'
 
 # This description is used to generate tags and improve search results.

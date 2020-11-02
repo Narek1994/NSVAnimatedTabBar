@@ -34,6 +34,15 @@ public class NSVAnimatedTabController: UIViewController {
     private var centerItemBottomConstraint: NSLayoutConstraint?
 
     public weak var delegate: NSVAnimatedTabControllerDelegate?
+    public var tabBarSelectedIndex = 0 {
+        didSet {
+            select(at: tabBarSelectedIndex)
+        }
+    }
+
+    public func getTabBarSelectedIndex() -> Int {
+        return selectedIndex
+    }
 
     public func configure(tabControllers: [UIViewController], with tabOptions: NSVAnimatedTabOptions) {
         self.tabControllers = tabControllers
