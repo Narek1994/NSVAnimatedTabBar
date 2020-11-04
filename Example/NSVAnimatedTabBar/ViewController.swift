@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         controller.delegate = self
-        controller.configure(tabControllers: [getController(index: 1, color: .red),getController(index: 2, color: .green),getController(index: 3, color: .blue),getController(index: 4, color: .cyan)],
+        controller.configure(tabControllers: [getController(index: 1, color: .red),getController(index: 2, color: .green),getController(index: 3, color: .white),getController(index: 4, color: .cyan)],
                              with: DefaultAnimatedTabOptions())
         containerStackView.addArrangedSubview(controller.view)
         addChild(controller)

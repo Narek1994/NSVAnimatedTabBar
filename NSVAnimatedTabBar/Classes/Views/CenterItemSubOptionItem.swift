@@ -38,7 +38,7 @@ public class CenterItemSubOptionItem: ShadowView {
     func set(options: NSCenterItemSubOptions) {
         imageView.contentMode = .center
         imageView.image = options.image
-        containerView.backgroundColor = options.backgroundColor
+        backgroundColor = options.backgroundColor
         cornerRadius = options.cornerRadius
         shadowInfo = options.shadowInfo
     }

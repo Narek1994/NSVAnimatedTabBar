@@ -33,7 +33,7 @@ class AnimatedTab: UIView {
     func addTabs(with options: NSVAnimatedTabOptions) {
         let width = options.centerItemOptions.fullWidth
         self.options = options
-        addContainerView(height: options.tabHeight)
+        addContainerView()
         let mid = options.options.count/2
         for (index,option) in options.options.enumerated() {
             let item = AnimatedTabItem(frame: .zero)
@@ -71,12 +71,13 @@ class AnimatedTab: UIView {
         tabItems[index].unselect(color: unselectedColor)
     }
 
-    private func addContainerView(height: CGFloat) {
+    private func addContainerView() {
         addSubview(containerView)
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        containerView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         containerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        containerView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        containerView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         containerView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
     }
 

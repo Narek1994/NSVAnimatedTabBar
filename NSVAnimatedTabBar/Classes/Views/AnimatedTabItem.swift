@@ -31,6 +31,7 @@ public class AnimatedTabItem: ShadowView {
     private func configureSubviews() {
         stackContainerView.axis = .vertical
         stackContainerView.isLayoutMarginsRelativeArrangement = true
+        stackContainerView.insetsLayoutMarginsFromSafeArea = false
         titleLabel.textAlignment = .center
         titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         imageView.contentMode = .center
