@@ -18,7 +18,7 @@ class DefaultTabAnimationOptions: NSVTabAnimationOptions {
     var tabMovePercentage: CGFloat? = 0.9
     var centerItemMovePercentage: CGFloat? = 0.2
     var subOptionsAnimationtype: SubOptionsAnimationType = .basic//.movingByOne(duration: 0.3, withScaling: true)
-    var tabSelectionAnimationType: TabSelectionAnimationType = .custom(duration: 0.3, animation: [.transitionCrossDissolve])
+    var tabSelectionAnimationType: TabSelectionAnimationType = .custom(duration: 0.3, animation: [.transitionFlipFromLeft])
     var shouldAnimateScreenChanges: Bool = true
 }
 
@@ -45,7 +45,7 @@ class DefaultCenterItemOptions: NSVCenterItemOptions {
 
     var size: CGSize = .init(width: 60, height: 60)
     var subOptionsSize: CGSize = .init(width: 50, height: 50)
-    var insets: UIEdgeInsets = .init(top: 20, left: 1, bottom: 20, right: 1)
+    var insets: UIEdgeInsets = .init(top: 20, left: 5, bottom: 10, right: 5)
     var options: NSVTabItemOptions = DefaultTabItemOptions(title: nil, image: UIImage(named: "open"), selectedImage: UIImage(named: "close")!, itemInsets: .zero, spacing: nil, font: nil)
     var subOptions: [NSCenterItemSubOptions] = [
         DefaultCenterItemSubOptions(image: UIImage(named: "like")!, backgroundColor: .white, cornerRadius: 25),
@@ -74,12 +74,13 @@ class DefaultCenterItemSubOptions: NSCenterItemSubOptions {
 
 class DefaultAnimatedTabOptions: NSVAnimatedTabOptions {
     
-    var tabHeight: CGFloat = 60
+    var tabHeight: CGFloat = 50
     var tabInsets: UIEdgeInsets = .zero
     var tabBackgroundColor: UIColor = .white
     var selectedItemColor: UIColor = .black
     var unselectedItemColor: UIColor = .lightGray
-    var cornerRadius: CGFloat = 0
+    var cornerRadius: CGFloat = 10
+    var corners: [RadiusCorners] = [.topLeft, .topRight]
     var shadowInfo: ShadowInfo? = ShadowInfo(shadowRadius: 5, shadowOpacity: 0.05, shadowColor: .black, shadowOffset: .init(width: 0, height: -5))
     var options: [NSVTabItemOptions] = [
         DefaultTabItemOptions(title: nil, image: UIImage(named: "poll"), itemInsets: .init(top: 10, left: 5, bottom: 5, right: 5)),

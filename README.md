@@ -57,6 +57,9 @@ Tab bar unselected item color
 ```cornerRadius: CGFloat``` 
 Tab bar corner radius
 
+```corners: [RadiusCorners]``` 
+Tab bar curved corners
+
 ```unselectedItemColor``` 
 Tab bar unselected item color
 

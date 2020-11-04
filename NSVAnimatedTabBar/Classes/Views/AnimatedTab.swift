@@ -22,17 +22,7 @@ class AnimatedTab: UIView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        if let _ = options?.centerItemOptions.curveType.offset {
-            addShape()
-        } else {
-            if let shadowInfo = options?.shadowInfo {
-                layer.masksToBounds = false
-                layer.shadowRadius = shadowInfo.shadowRadius
-                layer.shadowOpacity = Float(shadowInfo.shadowOpacity)
-                layer.shadowColor = shadowInfo.shadowColor.cgColor
-                layer.shadowOffset = shadowInfo.shadowOffset
-            }
-        }
+        addShape()
     }
 
     override func layoutSubviews() {
@@ -48,13 +38,12 @@ class AnimatedTab: UIView {
         for (index,option) in options.options.enumerated() {
             let item = AnimatedTabItem(frame: .zero)
             item.configure(with: option, animationType: options.animationOptions.tabSelectionAnimationType)
-            item.onTap = { [weak self, weak delegate] in
-                guard let strongSelf = self, let delegate = delegate else {
+            item.onTap = { [weak delegate] in
+                guard let delegate = delegate else {
                     return
                 }
                 if delegate.shouldSelect(at: index, item: item) {
                     delegate.didSelect(at: index, item: item)
-                    strongSelf.select(index: index, selectedColor: options.selectedItemColor, unselectedColor: options.unselectedItemColor)
                 }
             }
             containerView.addArrangedSubview(item)
@@ -68,15 +57,18 @@ class AnimatedTab: UIView {
                 item.widthAnchor.constraint(equalTo: firstItem.widthAnchor).isActive = true
             }
         }
-        //containerView.backgroundColor = options.tabBackgroundColor
-        containerView.cornerRadius = options.cornerRadius
-
+        let tabItems = containerView.arrangedSubviews.map({$0 as? AnimatedTabItem}).compactMap({$0})
+        tabItems.forEach({$0.unselect(color: options.unselectedItemColor)})
     }
 
-    func select(index: Int, selectedColor: UIColor, unselectedColor: UIColor) {
+    func select(index: Int, selectedColor: UIColor) {
         let tabItems = containerView.arrangedSubviews.map({$0 as? AnimatedTabItem}).compactMap({$0})
-        tabItems.forEach({$0.unselect(color: unselectedColor)})
         tabItems[index].select(color: selectedColor)
+    }
+
+    func unSelect(index: Int, unselectedColor: UIColor) {
+        let tabItems = containerView.arrangedSubviews.map({$0 as? AnimatedTabItem}).compactMap({$0})
+        tabItems[index].unselect(color: unselectedColor)
     }
 
     private func addContainerView(height: CGFloat) {
@@ -103,29 +95,80 @@ class AnimatedTab: UIView {
     }
 
     private func createPath() -> CGPath {
-        guard let centerItemOptions = options?.centerItemOptions else {
+        guard let options = options else {
             return UIBezierPath().cgPath
         }
-        let bottomInset: CGFloat = options?.centerItemOptions.curveType.offset ?? 0
-        let height: CGFloat = frame.height - centerItemOptions.insets.bottom + bottomInset - bottomPadding
-        let lineHeight: CGFloat = frame.height - centerItemOptions.insets.bottom - centerItemOptions.cornerRadius - bottomPadding
+        let centerItemOptions = options.centerItemOptions
+
+        let centerItemIncludedHeight: CGFloat = frame.height - centerItemOptions.insets.bottom
+
+        let lineHeight: CGFloat = centerItemIncludedHeight - centerItemOptions.cornerRadius
+
         let path = UIBezierPath()
+
         let centerWidth = self.frame.width / 2
-        let minWidth = (centerWidth - centerItemOptions.fullWidth/2 - 5)
-        let maxWidth = (centerWidth + centerItemOptions.fullWidth/2 + 5)
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: minWidth, y: 0))
-        path.addLine(to: CGPoint(x: minWidth, y: lineHeight))
-        var curve = centerWidth - centerItemOptions.fullWidth/2 + centerItemOptions.cornerRadius
-        path.addQuadCurve(to: CGPoint(x: curve, y: height), controlPoint: CGPoint(x: minWidth, y: height))
-        curve = centerWidth + centerItemOptions.fullWidth/2 - centerItemOptions.cornerRadius
-        path.addLine(to: CGPoint(x: curve, y: height))
-        path.addQuadCurve(to: CGPoint(x: maxWidth, y: lineHeight), controlPoint: CGPoint(x: maxWidth, y: height))
-        path.addLine(to: CGPoint(x: maxWidth, y: 0))
-        path.addLine(to: CGPoint(x: frame.width, y: 0))
-        path.addLine(to: CGPoint(x: frame.width, y: frame.height))
-        path.addLine(to: CGPoint(x: 0, y: frame.height))
+
+        let minWidth = (centerWidth - centerItemOptions.size.width/2 - centerItemOptions.insets.left)
+        let maxWidth = (centerWidth + centerItemOptions.size.width/2 + centerItemOptions.insets.left)
+
+        if options.corners.contains(.topLeft) {
+            path.move(to: CGPoint(x: 0, y: options.cornerRadius))
+            path.addArc(withCenter: CGPoint(x: options.cornerRadius, y: options.cornerRadius), radius: options.cornerRadius, startAngle: CGFloat(Double.pi/2), endAngle: CGFloat(3*Double.pi/2), clockwise: true)
+        } else {
+            path.move(to: CGPoint(x: 0, y: 0))
+        }
+
+        if centerItemOptions.curveType == .bottom {
+            var widthOffset: CGFloat = lineHeight
+            if widthOffset < 0 {
+                widthOffset = 0
+            }
+            path.addLine(to: CGPoint(x: minWidth - widthOffset, y: 0))
+
+            path.addQuadCurve(to: CGPoint(x: minWidth, y: widthOffset < 0 ? 0 : widthOffset), controlPoint: CGPoint(x: minWidth, y: 0))
+
+            path.addLine(to: CGPoint(x: minWidth, y: widthOffset))
+
+            var curve = minWidth + centerItemOptions.cornerRadius + centerItemOptions.insets.left
+
+            path.addArc(withCenter: CGPoint(x: curve, y: lineHeight), radius: centerItemOptions.cornerRadius + centerItemOptions.insets.left, startAngle: angle(between: CGPoint(x: curve, y: lineHeight), ending: CGPoint(x: minWidth, y: widthOffset)), endAngle: CGFloat(Double.pi/2), clockwise: false)
+
+            curve += centerItemOptions.size.width - 2*centerItemOptions.cornerRadius
+
+            path.addLine(to: CGPoint(x: curve, y: centerItemIncludedHeight + centerItemOptions.insets.left))
+
+            path.addArc(withCenter: CGPoint(x: curve, y: lineHeight), radius: centerItemOptions.cornerRadius + centerItemOptions.insets.left, startAngle: CGFloat(Double.pi/2), endAngle: angle(between: CGPoint(x: curve, y: lineHeight), ending: CGPoint(x: maxWidth, y: widthOffset)), clockwise: false)
+
+            path.addQuadCurve(to: CGPoint(x: maxWidth + widthOffset, y: 0), controlPoint: CGPoint(x: maxWidth, y: 0))
+        }
+
+        if options.corners.contains(.topRight) {
+            path.addLine(to: CGPoint(x: frame.width - options.cornerRadius, y: 0))
+            path.addArc(withCenter: CGPoint(x: frame.width - options.cornerRadius, y: options.cornerRadius), radius: options.cornerRadius, startAngle: CGFloat(-Double.pi/2), endAngle: 0, clockwise: true)
+        } else {
+            path.addLine(to: CGPoint(x: frame.width, y: 0))
+        }
+
+        if options.corners.contains(.bottomRight) {
+            path.addLine(to: CGPoint(x: frame.width, y: frame.height - options.cornerRadius))
+            path.addArc(withCenter: CGPoint(x: frame.width - options.cornerRadius, y: frame.height - options.cornerRadius), radius: options.cornerRadius, startAngle: 0, endAngle: CGFloat(Double.pi/2), clockwise: true)
+        } else {
+            path.addLine(to: CGPoint(x: frame.width, y: frame.height))
+        }
+
+        if options.corners.contains(.bottomLeft) {
+            path.addLine(to: CGPoint(x: options.cornerRadius, y: frame.height))
+            path.addArc(withCenter: CGPoint(x: options.cornerRadius, y: frame.height - options.cornerRadius), radius: options.cornerRadius, startAngle: CGFloat(Double.pi/2), endAngle: CGFloat(Double.pi), clockwise: true)
+        } else {
+            path.addLine(to: CGPoint(x: 0, y: frame.height))
+        }
         path.close()
         return path.cgPath
+    }
+
+    private func angle(between starting: CGPoint, ending: CGPoint) -> CGFloat {
+        let center = CGPoint(x: ending.x - starting.x, y: ending.y - starting.y)
+        let radians = atan2(center.y, center.x)
+        return radians
     }
 }

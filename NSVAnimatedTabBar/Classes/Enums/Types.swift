@@ -25,13 +25,8 @@ public enum SubOptionsDistributionType {
 public enum CurveType {
     case none
     case bottom
+}
 
-    var offset: CGFloat {
-        switch self {
-        case .none:
-            return 0
-        case.bottom:
-            return 5
-        }
-    }
+public enum RadiusCorners {
+    case topLeft, topRight, bottomLeft, bottomRight
 }

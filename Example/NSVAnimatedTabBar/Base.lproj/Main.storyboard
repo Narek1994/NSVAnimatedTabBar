@@ -12,7 +12,7 @@
         <!--Simple View Controller-->
         <scene sceneID="lEi-T6-ZXs">
             <objects>
-                <viewController storyboardIdentifier="ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8BI-H0-Cin" customClass="SimpleViewController" customModule="TabTestApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8BI-H0-Cin" customClass="SimpleViewController" customModule="NSVAnimatedTabBar_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XW5-gL-YqL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -42,7 +42,7 @@
         <!--View Controller-->
         <scene sceneID="XvF-ci-oCq">
             <objects>
-                <viewController id="C45-93-Haw" customClass="ViewController" customModule="TabTestApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="C45-93-Haw" customClass="ViewController" customModule="NSVAnimatedTabBar_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1bL-c5-Jke">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

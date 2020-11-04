@@ -46,6 +46,8 @@ public protocol NSVAnimatedTabOptions {
     var unselectedItemColor: UIColor {set get}
     /// Tab bar corner radius
     var cornerRadius: CGFloat {set get}
+    /// Tab bar corners
+    var corners: [RadiusCorners] {set get}
     /// Tab bar shadow info
     var shadowInfo: ShadowInfo? {set get}
     /// Tab bar items
@@ -58,6 +60,7 @@ public protocol NSVAnimatedTabOptions {
     var coverAlpha: CGFloat {set get}
     /// NSVTabController view's background color
     var mainBackgroundColor: UIColor? {set get}
+    
 }
 
 extension NSVAnimatedTabOptions {
@@ -108,9 +111,6 @@ public protocol NSVCenterItemOptions {
 extension NSVCenterItemOptions {
     var fullWidth: CGFloat {
         return size.width + insets.left + insets.right
-    }
-    var fullHeight: CGFloat {
-        return size.height + insets.bottom + curveType.offset
     }
 }
 

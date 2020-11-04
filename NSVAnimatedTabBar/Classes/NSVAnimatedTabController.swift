@@ -29,9 +29,10 @@ public class NSVAnimatedTabController: UIViewController {
             }
         }
     }
-    private var selectedIndex = 0
+    private var selectedIndex = -1
     private var tabBottomConstraint: NSLayoutConstraint?
     private var centerItemBottomConstraint: NSLayoutConstraint?
+    private let _bottomView = UIView(frame: .zero)
 
     public weak var delegate: NSVAnimatedTabControllerDelegate?
     public var tabBarSelectedIndex = 0 {
@@ -51,15 +52,16 @@ public class NSVAnimatedTabController: UIViewController {
         animatedTab.delegate = self
         addSubviews()
         addConstraints(options: tabOptions)
-        configureTab(options: tabOptions, centerItemWidth: tabOptions.centerItemOptions.size.width)
+        configureTab(options: tabOptions)
         addCenterItem(options: tabOptions.centerItemOptions)
         select(at: 0)
         converView.alpha = 0
     }
 
     private func addSubviews() {
-        view.addSubview(animatedTab)
+        view.addSubview(_bottomView)
         view.addSubview(containerView)
+        view.addSubview(animatedTab)
         addPager()
     }
 
@@ -90,16 +92,22 @@ public class NSVAnimatedTabController: UIViewController {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         animatedTab.leftAnchor.constraint(equalTo: view.leftAnchor, constant: options.tabInsets.left).isActive = true
         animatedTab.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -options.tabInsets.right).isActive = true
-        animatedTab.heightAnchor.constraint(equalToConstant: options.tabHeight + view.bottomPadding).isActive = true
-        tabBottomConstraint = animatedTab.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -options.tabInsets.bottom)
-        tabBottomConstraint?.isActive = true
+        animatedTab.heightAnchor.constraint(equalToConstant: options.tabHeight).isActive = true
+        animatedTab.bottomAnchor.constraint(equalTo: _bottomView.topAnchor, constant: 1).isActive = true
         containerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         containerView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        containerView.bottomAnchor.constraint(equalTo: animatedTab.topAnchor, constant: -(options.shadowInfo?.shadowRadius ?? abs(options.shadowInfo?.shadowOffset.height ?? 0))).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -options.tabHeight).isActive = true
+        _bottomView.translatesAutoresizingMaskIntoConstraints = false
+        _bottomView.heightAnchor.constraint(equalToConstant: view.bottomPadding).isActive = true
+        _bottomView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: options.tabInsets.left).isActive = true
+        tabBottomConstraint = _bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -options.tabInsets.bottom)
+        tabBottomConstraint?.isActive = true
+        _bottomView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: options.tabInsets.right).isActive = true
+        _bottomView.backgroundColor = options.tabBackgroundColor
     }
 
-    private func configureTab(options: NSVAnimatedTabOptions, centerItemWidth: CGFloat) {
+    private func configureTab(options: NSVAnimatedTabOptions) {
         animatedTab.addTabs(with: options)
     }
 
@@ -109,7 +117,7 @@ public class NSVAnimatedTabController: UIViewController {
         centerItem.widthAnchor.constraint(equalToConstant: options.size.width).isActive = true
         centerItem.heightAnchor.constraint(equalToConstant: options.size.height).isActive = true
         centerItem.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        centerItemBottomConstraint = centerItem.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -options.insets.bottom)
+        centerItemBottomConstraint = centerItem.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -options.insets.bottom - (self.options?.tabInsets.bottom ?? 0))
         centerItemBottomConstraint?.isActive = true
         centerItem.configure(with: options.options, animationType: self.options?.animationOptions.tabSelectionAnimationType ?? .none)
         addCenterItemSubOptions(options: options)
@@ -271,12 +279,19 @@ public class NSVAnimatedTabController: UIViewController {
     }
 
     private func select(at index: Int) {
+        if index == selectedIndex {
+            return
+        }
         let selectedController = tabControllers[index]
         let direction: UIPageViewController.NavigationDirection = selectedIndex < index ? .forward : .reverse
+        let previusSelectedIndex = selectedIndex
         selectedIndex = index
         pager.setViewControllers([selectedController], direction: direction, animated: options?.animationOptions.shouldAnimateScreenChanges ?? false, completion: nil)
         if let options = options {
-            animatedTab.select(index: index, selectedColor: options.selectedItemColor, unselectedColor: options.unselectedItemColor)
+            if previusSelectedIndex != -1 {
+                animatedTab.unSelect(index: previusSelectedIndex, unselectedColor: options.unselectedItemColor)
+            }
+            animatedTab.select(index: index, selectedColor: options.selectedItemColor)
         }
         if let backgroundColor = options?.mainBackgroundColor {
             view.backgroundColor = backgroundColor
@@ -299,12 +314,12 @@ public class NSVAnimatedTabController: UIViewController {
             if !isOpen {
                 tabBottomConstraint?.constant = -mainOptions.tabInsets.bottom
             } else {
-                tabBottomConstraint?.constant = mainOptions.tabInsets.bottom + (animatedTab.frame.height*tabMove)
+                tabBottomConstraint?.constant = view.bottomPadding + (animatedTab.frame.height*tabMove)
             }
         }
         if let centerItemMove = mainOptions.animationOptions.centerItemMovePercentage {
             if !isOpen {
-                centerItemBottomConstraint?.constant = -mainOptions.centerItemOptions.insets.bottom
+                centerItemBottomConstraint?.constant = -mainOptions.centerItemOptions.insets.bottom-mainOptions.tabInsets.bottom
             } else {
                 centerItemBottomConstraint?.constant = -(mainOptions.centerItemOptions.insets.bottom + (mainOptions.centerItemOptions.size.height*centerItemMove))
             }
@@ -356,7 +371,9 @@ extension NSVAnimatedTabController: AnimatedTabDelegate {
     }
 
     func didSelect(at index: Int, item: AnimatedTabItem) {
-        select(at: index)
-        delegate?.didSelect(at: index, item: item, tabController: tabControllers[index])
+        if index != selectedIndex {
+            select(at: index)
+            delegate?.didSelect(at: index, item: item, tabController: tabControllers[index])
+        }
     }
 }
