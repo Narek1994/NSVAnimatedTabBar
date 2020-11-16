@@ -54,7 +54,7 @@ class DefaultCenterItemOptions: NSVCenterItemOptions {
     var backgroundColor: UIColor = .white
     var cornerRadius: CGFloat = 30
     var shadowInfo: ShadowInfo? = ShadowInfo(shadowRadius: 1, shadowOpacity: 1, shadowColor: UIColor.black.withAlphaComponent(0.15), shadowOffset: .zero)
-    var distributionType: SubOptionsDistributionType = .custom(itemsSpacing: 40, minYOffset: 50, maxYOffset: 50)
+    var distributionType: SubOptionsDistributionType = .custom(itemsSpacing: 10, minYOffset: 10, maxYOffset: 60)
     var curveType: CurveType = .bottom
 }
 
