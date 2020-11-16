@@ -103,7 +103,7 @@ public class NSVAnimatedTabController: UIViewController {
         _bottomView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: options.tabInsets.left).isActive = true
         tabBottomConstraint = _bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -options.tabInsets.bottom)
         tabBottomConstraint?.isActive = true
-        _bottomView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: options.tabInsets.right).isActive = true
+        _bottomView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -options.tabInsets.right).isActive = true
         _bottomView.backgroundColor = options.tabBackgroundColor
     }
 
