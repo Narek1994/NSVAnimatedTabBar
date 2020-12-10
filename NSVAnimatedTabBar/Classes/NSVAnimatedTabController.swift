@@ -19,13 +19,15 @@ public class NSVAnimatedTabController: UIViewController {
     private var subOptionItems: [CenterItemSubOptionItem] = []
     private var isOpen = false {
         didSet {
-            handleCenterItemTap()
-            if isOpen {
-                addConverView()
-                centerItem.select(color: options?.selectedItemColor ?? .clear)
-            } else {
-                removeConverView()
-                centerItem.unselect(color: options?.unselectedItemColor ?? .clear)
+            if delegate?.shouldOpenSubOptions() ?? true  {
+                handleCenterItemTap()
+                if isOpen {
+                    addConverView()
+                    centerItem.select(color: options?.selectedItemColor ?? .clear)
+                } else {
+                    removeConverView()
+                    centerItem.unselect(color: options?.unselectedItemColor ?? .clear)
+                }
             }
         }
     }

@@ -33,6 +33,10 @@ class ViewController: UIViewController {
 
 extension ViewController: NSVAnimatedTabControllerDelegate {
 
+    func shouldOpenSubOptions() -> Bool {
+        return true
+    }
+
     func shouldSelect(at index: Int, item: CenterItemSubOptionItem) -> Bool {
         return true
     }

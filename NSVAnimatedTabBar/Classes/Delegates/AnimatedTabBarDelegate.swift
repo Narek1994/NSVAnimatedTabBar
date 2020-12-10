@@ -12,6 +12,7 @@ public protocol NSVAnimatedTabControllerDelegate: AnyObject {
     func didSelect(at index: Int, item: AnimatedTabItem, tabController: UIViewController)
     func shouldSelect(at index: Int, item: CenterItemSubOptionItem) -> Bool
     func didSelect(at index: Int, item: CenterItemSubOptionItem)
+    func shouldOpenSubOptions() -> Bool
 }
 
 extension NSVAnimatedTabControllerDelegate {
