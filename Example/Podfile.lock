@@ -1,5 +1,5 @@
 PODS:
-  - NSVAnimatedTabBar (0.2.0)
+  - NSVAnimatedTabBar (0.3.0)
 
 DEPENDENCIES:
   - NSVAnimatedTabBar (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  NSVAnimatedTabBar: 22ccc1eafd296352efb2a9eca0d4734b84f0b6d7
+  NSVAnimatedTabBar: 88015c7b1ee7a78afbc2c8d2cb2a2e5c8231d879
 
 PODFILE CHECKSUM: 691c34f94012c17295d0cd5c267afd44bfc01f16
 

@@ -1,6 +1,6 @@
 {
   "name": "NSVAnimatedTabBar",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "summary": "Fully customizable animated tab bar",
   "description": "Fully customizable animated tab bar, with sub option availability for center item,\nChange almost anything you want, sizes, shadows, animations, add a curve for center item, etc...",
   "homepage": "https://github.com/Narek1994/NSVAnimatedTabBar",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/Narek1994/NSVAnimatedTabBar.git",
-    "tag": "0.2.0"
+    "tag": "0.3.0"
   },
   "platforms": {
     "ios": "11.0"
